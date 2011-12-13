@@ -1,0 +1,11 @@
+===============================================================================
+== NGS_GenomeMarkerDesigner                                                  ==
+===============================================================================
+
+NGS_GenomeMarkerDesigner is a perl pipeline to design markers based in a 
+reference sequence (for example a genome sequence) and a .vcf file created
+after call SNPs from a bam/sam mapping file.
+
+===============================================================================
+
+Created by: Aubombarely, 2011-Dec-14
