@@ -2,9 +2,100 @@
 == NGS_GenomeMarkerDesigner                                                  ==
 ===============================================================================
 
+INTRODUCTION:
+=============
+
 NGS_GenomeMarkerDesigner is a perl pipeline to design markers based in a 
 reference sequence (for example a genome sequence) and a .vcf file created
 after call SNPs from a bam/sam mapping file.
+
+For now it will be able to create two types of markers:
+
+   a) SNP marker based in the primer design using the SNP nucleotide
+
+      Example:
+         >>>>>>>>>>>>>>*
+      5'-ATCGTGTCGACGATGGCAGGATGACGACGGATGAGCACAGGGGCATAGACAGGACAGACGACAGT-3'
+      5'-..............C..................................................-3'
+                                                           <<<<<<<<<<<<<<<
+
+      15 Kmer primers for 75 bp insert
+      Fw => 5'-ATCGTGTCGACGATG-3'
+      Rv => 5'-ACTGTCGTCTGTCCT-3'
+       
+   b) CAPS markers
+
+      Example:
+                                     -!----
+      5'-ATCGTGTCGACGATGGCAGGATGACGACGGATCCGCACAGGGGCATAGACAGGACAGACGACAGT-3'
+      5'-..............................C..................................-3
+
+      15 Kmer primers for 75 bp insert, CAPS marker for 30 and 45 bp
+      Fw => 5'-ATCGTGTCGACGATG-3'
+      Rv => 5'-ACTGTCGTCTGTCCT-3'
+
+   c) SSR markers (Under future development)
+
+      Example:
+                           |+||+||+||+||+||+||+| 
+      5'-ATCGTGTCGACGATGGCAGGAGGAGGAGGAGGAGGAGGACGGGCATAGACAGGACAGACGACAGT-3'
+      5'-.................................------..........................-3
+
+      15 Kmer primers for 75 bp insert, SSR markers for 75 and 69 bp
+      Fw => 5'-ATCGTGTCGACGATG-3'
+      Rv => 5'-ACTGTCGTCTGTCCT-3'
+
+
+PROCESS:
+========
+
+1) Restriction Enzyme Map of the Reference Sequence (SeqRef2RestrictMap).
+
+   The reference sequence will be analyzed to create a restriction map
+   stored as gff3 file
+
+2) SNP filtering based in: QUAL (SNP call quality), AF (allelefrequency) and 
+   DP (depth)) (SnpFilter) 
+
+3) Calculation of how many restriction maps can be affected by SNP contained
+   into the .vcf file (SnpXRestrictMap).
+
+3) Output and marker generation (MarkerGenerator)
+
+
+USAGE:
+======
+
+1) As separate scripts:
+
+   SeqRef2RestrictMap -r <refseq> 
+                      -s <restriction_enzyme_sites_catalog>
+                      -o <output_basename>
+
+   SnpFilter          -v <vcf_file>
+                      -d <min_depth>
+                      -a <min_allele_freq>
+                      -q <min_qualscore>
+
+   SnpXRestricMap     -v <filtered_vcf_file>
+                      -g <restriction_sites_map_gff3>
+                      -o <output_basename>
+
+   MarkerGenerator    -r <refseq>
+                      -v <filtered_vcf_file>
+                      -g <restriction_sites_with_SNPs_gff3>
+                      -k <primer_kmer>
+                      -s <pcr_product_size>
+                      -m <markers_per_position>
+                      -d <min_distance_between_markers>
+                       
+2) As a pipeline:
+
+   GenomeMarkerDesigner -r <refseq>
+                        -v <vcf_file>
+                        -s <restriction_enzyme_catalog>
+                        -o <output_dir> 
+                        -c <configuration_file> [-V]
 
 ===============================================================================
 
