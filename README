@@ -63,6 +63,17 @@ PROCESS:
 3) Output and marker generation (MarkerGenerator)
 
 
+
+REQUERIMENTS:
+=============
+
+ + Perl v5.10.1
+ + Perl Package: Bioperl v1.0069       (Sequence File Parsing/Restrict. Mapping)
+ + Perl Module:  Config::General v2.48 (Configuration File Managing)
+ + Perl Module:  R::YapRI v0.04        (Perl-R Interaction for Graphics)
+ + R v2.13                             (R for graphics) 
+ + Primer3                             (Primers Design)
+
 USAGE:
 ======
 
